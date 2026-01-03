@@ -1,11 +1,14 @@
 package com.icet.ordermanagementsystem.service.impl;
 
+import com.icet.ordermanagementsystem.dto.CustomerRequestDTO;
+import com.icet.ordermanagementsystem.dto.CustomerResponseDTO;
 import com.icet.ordermanagementsystem.model.Customer;
 import com.icet.ordermanagementsystem.repository.CustomerRepository;
 import com.icet.ordermanagementsystem.service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -16,35 +19,55 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerResponseDTO createCustomer(CustomerRequestDTO dto) {
+        Customer customer = new Customer();
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
+
+
+        Customer savedCustomer = customerRepository.save(customer);
+        return mapToResponse(savedCustomer);
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerResponseDTO> getAllCustomers() {
+        return customerRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Customer getCustomerById(Integer id) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: "+id));
+    public CustomerResponseDTO getCustomerById(Integer id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return mapToResponse(customer);
     }
 
     @Override
-    public Customer updateCustomer(Integer id, Customer customer) {
-        Customer exitingCustomer = getCustomerById(id);
+    public CustomerResponseDTO updateCustomer(Integer id, CustomerRequestDTO dto) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        exitingCustomer.setName(customer.getName());
-        exitingCustomer.setEmail(customer.getEmail());
-        exitingCustomer.setPhone(customer.getPhone());
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
 
-        return customerRepository.save(exitingCustomer);
+        return mapToResponse(customerRepository.save(customer));
     }
 
     @Override
     public void deleteCustomer(Integer id) {
-        Customer exitingCustomer = getCustomerById(id);
-        customerRepository.delete(exitingCustomer);
+        customerRepository.deleteById(id);
+    }
+
+    private CustomerResponseDTO mapToResponse(Customer customer) {
+        return new CustomerResponseDTO(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhone()
+        );
     }
 }

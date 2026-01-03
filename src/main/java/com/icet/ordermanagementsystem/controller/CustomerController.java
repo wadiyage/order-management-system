@@ -1,5 +1,7 @@
 package com.icet.ordermanagementsystem.controller;
 
+import com.icet.ordermanagementsystem.dto.CustomerRequestDTO;
+import com.icet.ordermanagementsystem.dto.CustomerResponseDTO;
 import com.icet.ordermanagementsystem.model.Customer;
 import com.icet.ordermanagementsystem.service.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -18,23 +20,23 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
+    public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO dto) {
+        return customerService.createCustomer(dto);
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
+    public List<CustomerResponseDTO> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerId(@PathVariable Integer id) {
+    public CustomerResponseDTO getCustomerId(@PathVariable Integer id) {
         return customerService.getCustomerById(id);
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
-        return customerService.updateCustomer(id, customer);
+    public CustomerResponseDTO updateCustomer(@PathVariable Integer id, @RequestBody CustomerRequestDTO dto) {
+        return customerService.updateCustomer(id, dto);
     }
 
     @DeleteMapping("/{id}")
