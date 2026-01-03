@@ -1,4 +1,4 @@
-package com.icet.model;
+package com.icet.ordermanagementsystem.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

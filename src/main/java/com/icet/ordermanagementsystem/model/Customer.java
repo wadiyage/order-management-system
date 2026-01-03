@@ -1,4 +1,4 @@
-package com.icet.model;
+package com.icet.ordermanagementsystem.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "customer")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,11 +18,11 @@ public class Product {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
 
-    @Column(name = "qty", nullable = false)
-    private Integer qty=0;
+    @Column(length = 20)
+    private String phone;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
