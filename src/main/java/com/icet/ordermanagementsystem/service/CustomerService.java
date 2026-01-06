@@ -2,7 +2,6 @@ package com.icet.ordermanagementsystem.service;
 
 import com.icet.ordermanagementsystem.dto.CustomerRequestDTO;
 import com.icet.ordermanagementsystem.dto.CustomerResponseDTO;
-import com.icet.ordermanagementsystem.model.Customer;
 
 import java.util.List;
 

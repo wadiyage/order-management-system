@@ -2,6 +2,7 @@ package com.icet.ordermanagementsystem.service.impl;
 
 import com.icet.ordermanagementsystem.dto.CustomerRequestDTO;
 import com.icet.ordermanagementsystem.dto.CustomerResponseDTO;
+import com.icet.ordermanagementsystem.exception.ResourceNotFoundException;
 import com.icet.ordermanagementsystem.model.Customer;
 import com.icet.ordermanagementsystem.repository.CustomerRepository;
 import com.icet.ordermanagementsystem.service.CustomerService;
@@ -41,14 +42,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO getCustomerById(Integer id) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         return mapToResponse(customer);
     }
 
     @Override
     public CustomerResponseDTO updateCustomer(Integer id, CustomerRequestDTO dto) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
 
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());

@@ -3,7 +3,12 @@ package com.icet.ordermanagementsystem.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Setter
+@Getter
 public class CustomerRequestDTO {
 
     @NotBlank(message = "Name is required")
@@ -18,27 +23,4 @@ public class CustomerRequestDTO {
     @Size(min = 10, max = 15, message = "Phone number must be valid")
     private String phone;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }
