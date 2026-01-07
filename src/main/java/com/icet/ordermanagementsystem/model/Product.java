@@ -18,12 +18,11 @@ public class Product {
     @Column(nullable = false, length = 100)
     private String name;
 
+    private String description;
+
     @Column(nullable = false)
     private Double price;
 
-    @Column(name = "qty", nullable = false)
-    private Integer qty=0;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "stockQty", nullable = false)
+    private Integer stockQty;
 }
