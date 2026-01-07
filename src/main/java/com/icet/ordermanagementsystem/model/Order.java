@@ -16,16 +16,19 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
     @Column(name = "order_date", nullable = false)
-    private LocalDateTime orderDate = LocalDateTime.now();
+    private LocalDateTime orderDate;
+
+    @Column(name = "status", nullable = false)
+    private String status;
 
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount = 0.0;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> items;
 }

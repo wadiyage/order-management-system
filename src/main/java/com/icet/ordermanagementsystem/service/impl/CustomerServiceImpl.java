@@ -13,21 +13,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-
     private final CustomerRepository customerRepository;
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
-            this.customerRepository = customerRepository;
-    }
+    public CustomerServiceImpl(CustomerRepository customerRepository) {this.customerRepository = customerRepository; }
 
     @Override
     public CustomerResponseDTO createCustomer(CustomerRequestDTO dto) {
-        Customer customer = new Customer();
-        customer.setName(dto.getName());
-        customer.setEmail(dto.getEmail());
-        customer.setPhone(dto.getPhone());
+        Customer newCustomer = new Customer();
+        newCustomer.setName(dto.getName());
+        newCustomer.setEmail(dto.getEmail());
+        newCustomer.setPhone(dto.getPhone());
 
 
-        Customer savedCustomer = customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(newCustomer);
         return mapToResponse(savedCustomer);
     }
 
@@ -41,21 +38,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO getCustomerById(Integer id) {
-        Customer customer = customerRepository.findById(id)
+        Customer exitingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
-        return mapToResponse(customer);
+        return mapToResponse(exitingCustomer);
     }
 
     @Override
     public CustomerResponseDTO updateCustomer(Integer id, CustomerRequestDTO dto) {
-        Customer customer = customerRepository.findById(id)
+        Customer exitingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
 
-        customer.setName(dto.getName());
-        customer.setEmail(dto.getEmail());
-        customer.setPhone(dto.getPhone());
+        exitingCustomer.setName(dto.getName());
+        exitingCustomer.setEmail(dto.getEmail());
+        exitingCustomer.setPhone(dto.getPhone());
 
-        return mapToResponse(customerRepository.save(customer));
+        return mapToResponse(customerRepository.save(exitingCustomer));
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.icet.ordermanagementsystem.controller;
 
 import com.icet.ordermanagementsystem.dto.CustomerRequestDTO;
 import com.icet.ordermanagementsystem.dto.CustomerResponseDTO;
-import com.icet.ordermanagementsystem.model.Customer;
 import com.icet.ordermanagementsystem.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
-
     private final CustomerService customerService;
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
