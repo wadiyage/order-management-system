@@ -23,6 +23,6 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
-    @Column(name = "stockQty", nullable = false)
+    @Column(nullable = false)
     private Integer stockQty;
 }

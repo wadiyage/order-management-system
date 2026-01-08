@@ -15,16 +15,14 @@ public class OrderItem {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     private Integer qty;
 
-    @Column(nullable = false)
     private Double price; // snapshot price at order time
 }

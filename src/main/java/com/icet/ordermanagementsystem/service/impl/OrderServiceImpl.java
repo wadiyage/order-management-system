@@ -4,10 +4,7 @@ import com.icet.ordermanagementsystem.dto.OrderItemDTO;
 import com.icet.ordermanagementsystem.dto.OrderRequestDTO;
 import com.icet.ordermanagementsystem.dto.OrderResponseDTO;
 import com.icet.ordermanagementsystem.exception.ResourceNotFoundException;
-import com.icet.ordermanagementsystem.model.Customer;
-import com.icet.ordermanagementsystem.model.Order;
-import com.icet.ordermanagementsystem.model.OrderItem;
-import com.icet.ordermanagementsystem.model.Product;
+import com.icet.ordermanagementsystem.model.*;
 import com.icet.ordermanagementsystem.repository.CustomerRepository;
 import com.icet.ordermanagementsystem.repository.OrderRepository;
 import com.icet.ordermanagementsystem.repository.ProductRepository;
@@ -40,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
         Order newOrder = new Order();
         newOrder.setCustomer(exitingCustomer);
         newOrder.setOrderDate(LocalDateTime.now());
-        newOrder.setStatus("PENDING");
+        newOrder.setStatus(OrderStatus.CREATED);
 
         List<OrderItem> items = dto.getItems().stream()
                 .map(itemDto -> mapToOrderItem(itemDto, newOrder))

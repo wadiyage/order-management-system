@@ -16,14 +16,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    private Double totalAmount;
 
-    @Column(name = "total_amount", nullable = false)
-    private Double totalAmount = 0.0;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
