@@ -7,8 +7,10 @@ import com.icet.ordermanagementsystem.exception.ResourceNotFoundException;
 import com.icet.ordermanagementsystem.model.Customer;
 import com.icet.ordermanagementsystem.model.Order;
 import com.icet.ordermanagementsystem.model.OrderItem;
+import com.icet.ordermanagementsystem.model.Product;
 import com.icet.ordermanagementsystem.repository.CustomerRepository;
 import com.icet.ordermanagementsystem.repository.OrderRepository;
+import com.icet.ordermanagementsystem.repository.ProductRepository;
 import com.icet.ordermanagementsystem.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
 
-    public OrderServiceImpl(CustomerRepository customerRepository, OrderRepository orderRepository) {
-        this.customerRepository = customerRepository;
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setStatus("PENDING");
 
         List<OrderItem> items = dto.getItems().stream()
-                .map(item -> mapToOrderItem(item, newOrder))
+                .map(itemDto -> mapToOrderItem(itemDto, newOrder))
                 .collect(Collectors.toList());
 
         double totalAmount = items.stream()
@@ -57,9 +61,8 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItemDTO> items = savedOrder.getItems().stream()
                 .map(item -> {
                     OrderItemDTO dto = new OrderItemDTO();
-                    dto.setProduct(item.getProduct());
+                    dto.setProductName(item.getProduct().getName());
                     dto.setQty(item.getQty());
-                    dto.setPrice(item.getPrice());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -75,13 +78,28 @@ public class OrderServiceImpl implements OrderService {
         return responseDTO;
     }
 
-    private OrderItem mapToOrderItem(OrderItem item, Order newOrder) {
+    private OrderItem mapToOrderItem(OrderItemDTO dto, Order newOrder) {
+        Product exitingProduct = productRepository.findById(dto.getProductId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found with id: " + dto.getProductId())
+                );
+
+        if(exitingProduct.getStockQty()<dto.getQty()) {
+            throw new IllegalArgumentException(
+                    "Insufficient stock for product: " + exitingProduct.getName()
+            );
+        }
+
+        exitingProduct.setStockQty(exitingProduct.getStockQty() - dto.getQty());
+        productRepository.save(exitingProduct);
+
         OrderItem orderItem = new OrderItem();
-        orderItem.setProduct(item.getProduct());
-        orderItem.setQty(item.getQty());
-        orderItem.setPrice(item.getPrice());
+        orderItem.setProduct(exitingProduct);
+        orderItem.setQty(dto.getQty());
+        orderItem.setPrice(exitingProduct.getPrice());
         orderItem.setOrder(newOrder);
-        return item;
+
+        return orderItem;
     }
 
     @Override
