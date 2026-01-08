@@ -1,5 +1,6 @@
 package com.icet.ordermanagementsystem.dto;
 
+import com.icet.ordermanagementsystem.model.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 public class OrderResponseDTO {
     private Integer id;
     private LocalDateTime orderDate;
-    private String status;
+    private OrderStatus status;
     private Double totalAmount;
     private Integer customerId;
     private List<OrderItemDTO> items;
